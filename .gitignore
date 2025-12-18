@@ -5,9 +5,6 @@ __pycache__/
 
 # C extensions
 *.so
-
-# Distribution / packaging
-venv/
 .Python
 build/
 develop-eggs/
@@ -33,6 +30,14 @@ MANIFEST
 *.manifest
 *.spec
 
+# Virtual environments
+venv/
+.env/
+.env*/
+.venv/
+.venv*/
+
+.env
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
