@@ -5,5 +5,7 @@ matplotlib
 seaborn
 python-dotenv
 pymongo
+dill
+pyyaml
 pymongo[srv]
 -e .
