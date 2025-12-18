@@ -1,38 +1,42 @@
 from datetime import datetime
 import os
+import sys
+from network_security.constant import training_pipeline
 
-from network_security.constant import training_pipeline as tp
-
-print(f"Target Column: {tp.TARGET_COLUMN}")
-print(f"Pipeline Name: {tp.PIPELINE_NAME}")
-
+print(training_pipeline.PIPELINE_NAME)
+print(training_pipeline.ARTIFACT_DIR)
 
 class TrainingPipelineConfig:
-    def __init__(self, timestamp = datetime.now()):
-        timestamp = timestamp.strftime("%m_%d_%Y_%H_%M_%S")
-        
-        self.pipeline_name = tp.PIPELINE_NAME
-        self.artifact_dir = tp.ARTIFACT_DIR
-        self.artifact_dir = os.path.join(self.artifact_dir, timestamp)
-        self.timestamp: str= timestamp
+    def __init__(self,timestamp=datetime.now()):
+        timestamp=timestamp.strftime("%m_%d_%Y_%H_%M_%S")
+        self.pipeline=training_pipeline.PIPELINE_NAME
+        self.artifact_name=training_pipeline.ARTIFACT_DIR
+        self.artifact_dir=os.path.join(self.artifact_name, timestamp)
+        self.timestamp:str = timestamp
+        pass
 
 class DataIngestionConfig:
-    def __init__(self, training_pipeline_config: tp.TrainingPipelineConfig):
-        self.pipeline_name = training_pipeline_config.pipeline_name
-        self.artifact_dir = training_pipeline_config.artifact_dir
-        self.data_ingestion_dir = tp.DATA_INGESTION_DIR_NAME
-        self.feature_store_dir = tp.DATA_INGESTION_FEATURE_STORE_DIR
-        self.ingested_dir = tp.DATA_INGESTION_INGESTED_DIR
-        self.train_file_name = tp.TRAIN_FILE_NAME
-        self.test_file_name = tp.TEST_FILE_NAME
-        self.train_test_split_ratio = tp.DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO
-        self.database_name = tp.DATA_INGESTION_DATABASE_NAME
-        self.collection_name = tp.DATA_INGESTION_COLLECTION_NAME
-
-    def get_data_ingestion_artifact_dir(self) -> str:
-        timestamp = datetime.now().strftime("%m_%d_%Y_%H_%M_%S")
-        return os.path.join(
-            self.artifact_dir,
-            self.data_ingestion_dir,
-            timestamp
+    def __init__(self, training_pipeline_config:TrainingPipelineConfig):
+        self.data_ingestion_dir:str = os.path.join(
+            training_pipeline_config.artifact_dir,
+            training_pipeline.DATA_INGESTION_DIR_NAME
         )
+        self.feature_store_file_path: str = os.path.join(
+                self.data_ingestion_dir, 
+                training_pipeline.DATA_INGESTION_FEATURE_STORE_DIR, 
+                training_pipeline.FILE_NAME
+            )
+        self.training_file_path: str = os.path.join(
+                self.data_ingestion_dir, 
+                training_pipeline.DATA_INGESTION_INGESTED_DIR, 
+                training_pipeline.TRAIN_FILE_NAME
+            )
+        self.testing_file_path: str = os.path.join(
+                self.data_ingestion_dir, 
+                training_pipeline.DATA_INGESTION_INGESTED_DIR, 
+                training_pipeline.TEST_FILE_NAME
+            )
+        self.train_test_split_ratio: float = training_pipeline.DATA_INGESTION_TRAIN_TEST_SPLIT_RATIO
+        self.collection_name: str = training_pipeline.DATA_INGESTION_COLLECTION_NAME
+        self.database_name: str = training_pipeline.DATA_INGESTION_DATABASE_NAME
+        pass
